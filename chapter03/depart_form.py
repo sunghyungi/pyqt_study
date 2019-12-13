@@ -103,7 +103,6 @@ class DepartUI(QWidget):
             self.init_item()
         print("3")
 
-
     def del_item(self):
         selectionIdx = self.ui.tableWidget.selectedIndexes()[0]
         self.ui.tableWidget.removeRow(selectionIdx.row())
@@ -113,7 +112,6 @@ class DepartUI(QWidget):
         self.ui.le_no.clear()
         self.ui.le_name.clear()
         self.ui.le_floor.clear()
-
 
 
 if __name__ == "__main__":
