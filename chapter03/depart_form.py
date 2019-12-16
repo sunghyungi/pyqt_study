@@ -4,19 +4,24 @@ from PyQt5.QtWidgets import QWidget, QApplication, QAbstractItemView, QHeaderVie
     QMessageBox
 
 
+def create_table(table=None, data=None):
+    table.setHorizontalHeaderLabels(["부서번호", "부서명", "위치"])
+    # row 단위 선택
+    table.setSelectionBehavior(QAbstractItemView.SelectRows)
+    # 수정 불가능 하게
+    table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+    # 균일한 간격으로 재배치
+    table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
 class DepartUI(QWidget):
 
     def __init__(self):
         super().__init__()
         self.ui = uic.loadUi("dept_form.ui")
         self.ui.show()
-        self.ui.tableWidget.setHorizontalHeaderLabels(["부서번호", "부서명", "위치"])
-        # row 단위 선택
-        self.ui.tableWidget.setSelectionBehavior(QAbstractItemView.SelectRows)
-        # 수정 불가능 하게
-        self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # 균일한 간격으로 재배치
-        self.ui.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        self.table = create_table(table=self.ui.tableWidget, data=["부서번호", "부서명", "위치"])
+
 
         # slot/signal
         self.ui.btn_add.clicked.connect(self.add_item)
@@ -24,10 +29,10 @@ class DepartUI(QWidget):
         self.ui.btn_del.clicked.connect(self.del_item)
         self.ui.btn_init.clicked.connect(self.init_item)
 
-        # 마우스 우클릭시 메
+        # 마우스 우클릭시 메세지
         self.set_context_menu(self.ui.tableWidget)
 
-        data = [(1, '마케팅', 8), (2, "개발", 10), (3,"인사", 20)]
+        data = [(1, '마케팅', 8), (2, "개발", 10), (3, "인사", 20)]
         self.load_data(data)
 
     def load_data(self, data):
@@ -47,7 +52,6 @@ class DepartUI(QWidget):
         tv.addAction(update_action)
         update_action.triggered.connect(self.__update)
         delete_action.triggered.connect(self.__delete)
-
 
     def __update(self):
         QMessageBox.information(self, 'Update', "확인", QMessageBox.Ok)
@@ -88,7 +92,7 @@ class DepartUI(QWidget):
 
     def update_item(self):
 
-        selectionIdx2= self.ui.tableWidget.selectedIndexes()[0]
+        selectionIdx2 = self.ui.tableWidget.selectedIndexes()[0]
         print("1")
         if len(self.ui.le_no.text()) == 0:
             self.ui.le_no.setText(self.ui.tableWidget.item(selectionIdx2.row(), 0).text())
